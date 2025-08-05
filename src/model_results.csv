@@ -1,5 +1,0 @@
-Model,Best Params,Best CV R2,Test R2,Test RMSE,Top 3 Features
-Lasso,{'model__alpha': 0.01},0.9977,0.9978,2.4045,"cod_cbr_FE (75.77), cod_cbr_GP/ES (50.37), cod_cbr_GN (35.76)"
-Ridge,{'model__alpha': 0.1},0.9983,0.9989,1.6635,"cod_cbr_FE (55.61), cod_cbr_GO (41.02), cod_cbr_GP/ES (33.38)"
-RandomForest,"{'model__max_depth': None, 'model__n_estimators': 50}",0.9947,0.9986,1.8962,"conso_exurb (0.91), conso_urb (0.07), cod_cbr_GO (0.00)"
-XGBoost,"{'model__learning_rate': 0.1, 'model__max_depth': 3, 'model__n_estimators': 50}",0.9903,0.993,4.2615,"conso_exurb (0.74), conso_urb (0.12), masse_ordma_min (0.03)"
