@@ -1,0 +1,16 @@
+co2_min,co2_max,amount_eur,note
+0,20,6300,bonus (electric)
+21,60,4000,bonus (plug-in hybrid)
+61,90,150,bonus (low emission)
+91,130,0,neutral
+131,135,150,malus
+136,140,250,malus
+141,145,500,malus
+146,150,900,malus
+151,155,1600,malus
+156,175,2200,malus
+176,180,3000,malus
+181,185,3600,malus
+186,190,4000,malus
+191,200,6500,malus
+201,999,8000,malus

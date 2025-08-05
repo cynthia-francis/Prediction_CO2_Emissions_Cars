@@ -1,5 +1,5 @@
 Model,Best Params,Best CV R2,Test R2,Test RMSE,Top 3 Features
-Lasso,{'model__alpha': 0.01},0.9977,0.9978,2.4045,"cod_cbr_FE (75.77), cod_cbr_GP/ES (50.37), cod_cbr_GN (35.76)"
-Ridge,{'model__alpha': 0.1},0.9983,0.9989,1.6635,"cod_cbr_FE (55.61), cod_cbr_GO (41.02), cod_cbr_GP/ES (33.38)"
-RandomForest,"{'model__max_depth': None, 'model__n_estimators': 50}",0.9947,0.9986,1.8962,"conso_exurb (0.91), conso_urb (0.07), cod_cbr_GO (0.00)"
-XGBoost,"{'model__learning_rate': 0.1, 'model__max_depth': 3, 'model__n_estimators': 50}",0.9903,0.993,4.2615,"conso_exurb (0.74), conso_urb (0.12), masse_ordma_min (0.03)"
+Lasso,{'model__alpha': 0.01},0.9977,0.9978,2.4045,"cod_cbr_FE (75.78), cod_cbr_GP/ES (50.37), cod_cbr_GN (35.75), conso_urb (25.02), conso_exurb (24.89), cod_cbr_GN/ES (23.78), cod_cbr_GO (17.70)"
+Ridge,{'model__alpha': 0.1},0.9983,0.9989,1.6638,"cod_cbr_FE (55.62), cod_cbr_GO (41.03), cod_cbr_GP/ES (33.41), dscom_SPRINTER 316 GNV (33.32), conso_urb (25.99), conso_exurb (25.48), cod_cbr_ES (24.27)"
+RandomForest,"{'model__max_depth': None, 'model__n_estimators': 50}",0.9944,0.9986,1.8863,"conso_exurb (0.91), conso_urb (0.07), cod_cbr_GO (0.00), masse_ordma_min (0.00), puiss_admin_98 (0.00), cod_cbr_GP/ES (0.00), lib_mod_doss_ONE-77 (0.00)"
+XGBoost,"{'model__learning_rate': 0.1, 'model__max_depth': 3, 'model__n_estimators': 50}",0.9903,0.993,4.2615,"conso_exurb (0.74), conso_urb (0.12), masse_ordma_min (0.03), cod_cbr_GO (0.02), cod_cbr_GP/ES (0.02), typ_boite_nb_rapp_M 5 (0.02), cod_cbr_FE (0.01)"
