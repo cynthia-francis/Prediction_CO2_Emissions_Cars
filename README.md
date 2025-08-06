@@ -6,14 +6,18 @@ This project uses official 2014 vehicle homologation data from ADEME and UTAC to
 
 ## 📊 Dataset
 
-The data was provided by UTAC (Union Technique de l’Automobile, du motocycle et du Cycle) to ADEME and includes:
+The data was provided by **UTAC (Union Technique de l’Automobile, du motocycle et du Cycle)** to **ADEME** and includes:
 
-- Fuel type, hybrid status, number of gears
-- Administrative horsepower
-- Gearbox type, urban & extra-urban fuel consumption
-- Vehicle mass
-- CO₂ Emissions 
-- Car body type and market segment (gamme)
+- Fuel type, hybrid status, number of gears  
+- Administrative horsepower  
+- Gearbox type, urban & extra-urban fuel consumption  
+- Vehicle mass  
+- CO₂ Emissions  
+- Car body type and market segment (gamme)  
+
+**Source:** [data.gouv.fr – Emissions de CO₂ et de polluants des véhicules commercialisés en France](https://www.data.gouv.fr/fr/datasets/emissions-de-co2-et-de-polluants-des-vehicules-commercialises-en-france/)  
+**License:** [Licence Ouverte / Open License (Etalab)](https://www.etalab.gouv.fr/wp-content/uploads/2014/05/Licence_Ouverte.pdf)
+
 ---
 
 ## 🧠 Objective
