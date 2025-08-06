@@ -92,7 +92,6 @@ Then go to: http://127.0.0.1:8050
 ## 📁 Folder Structure
 
 Prediction_CO2_Emissions_Cars/
-│
 ├── data/
 │   ├── bonus_malus_france_2014_combined.csv
 │   ├── carlab-annuaire-variable.xlsx
@@ -109,15 +108,16 @@ Prediction_CO2_Emissions_Cars/
 │   └── preprocessor.pkl
 │
 ├── notebooks/
-│   ├── preprocessing.ipynb
+│   └── preprocessing.ipynb
 │
 ├── app/
-│   ├── webapp.py
+│   └── webapp.py
 │
 ├── requirements.txt
 ├── README.md
 ├── .env
 └── .gitignore
+
 
 
 
