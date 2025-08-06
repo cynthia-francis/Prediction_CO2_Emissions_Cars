@@ -6,15 +6,15 @@ import xgboost as xgb
 
 # ======= Define feature lists EXACTLY as in training =========
 
-numeric_features = [
-    'puiss_admin_98', 'typ_boite_nb_rapp', 'hybride', 
-    'conso_urb', 'conso_exurb', 'masse_ordma_min'
+features = [
+    'cod_cbr', 'hybride',
+    'puiss_admin_98', 'conso_urb', 'conso_exurb',
+    'gearbox_type', 'num_gears',
+    'masse_ordma_avg', 'Carrosserie', 'gamme'
 ]
-categorical_features = [
-    'cod_cbr', 'lib_mrq', 'lib_mod_doss', 'lib_mod',
-    'dscom', 'champ_v9', 'Carrosserie', 'gamme'
-]
-all_features = numeric_features + categorical_features
+
+numeric_features = ['puiss_admin_98', 'conso_urb', 'conso_exurb', 'masse_ordma_avg', 'num_gears']
+categorical_features = list(set(features) - set(numeric_features))
 
 # ======= Load Preprocessor & Models ==========
 
@@ -76,30 +76,41 @@ def bonus_malus_2014(co2):
 st.title("Car CO₂ Emissions Predictor & 2014 Bonus/Malus Calculator")
 selected_model = st.selectbox("Choose prediction model", options=list(models.keys()))
 
-# Input widgets (customize as needed)
-power = st.number_input('Power (puiss_admin_98)', min_value=20, max_value=400, value=100)
-fuel_type = st.selectbox('Fuel Type (cod_cbr)', options=['FE', 'GO', 'GP/ES', 'ES', 'GN'])
-gearbox = st.selectbox('Gearbox type (typ_boite_nb_rapp)', options=[4, 5, 6, 7])
+# Input widgets for user input (adjusted and complete)
 
-# Prepare input dataframe
+# --- Numeric inputs ---
+power = st.number_input('Power (puiss_admin_98)', min_value=20, max_value=400, value=100)
+conso_urb = st.number_input('Urban Consumption (conso_urb)', min_value=0.0, max_value=50.0, value=5.0)
+conso_exurb = st.number_input('Extra-urban Consumption (conso_exurb)', min_value=0.0, max_value=50.0, value=4.0)
+masse_ordma_avg = st.number_input('Mass (masse_ordma_avg)', min_value=500.0, max_value=3000.0, value=1200.0)
+num_gears = st.selectbox('Number of Gears (num_gears)', options=[0, 4, 5, 6, 7, 8, 9])
+
+# --- Categorical inputs ---
+fuel_type = st.selectbox('Fuel Type (cod_cbr)', options=['ES', 'GO', 'ES/GP', 'GP/ES', 'EH', 'GH', 'ES/GN', 'GN/ES', 'FE', 'GN', 'GL'])
+hybride = st.selectbox('Is it a hybrid vehicle? (hybride)', options=['non', 'oui'])
+gearbox_type = st.selectbox('Gearbox Type (gearbox_type)', options=['M', 'A', 'D', 'V', 'S'])
+carrosserie = st.selectbox('Body Type (Carrosserie)', options=[
+    'BERLINE', 'BREAK', 'COUPE', 'CABRIOLET', 'TS TERRAINS/CHEMINS',
+    'COMBISPACE', 'MINISPACE', 'MONOSPACE COMPACT', 'MONOSPACE', 'MINIBUS', 'COMBISPCACE'
+])
+gamme = st.selectbox('Gamme', options=['MOY-SUPER', 'LUXE', 'MOY-INFER', 'INFERIEURE', 'SUPERIEURE', 'ECONOMIQUE'])
+
+# --- Build input dictionary ---
 input_dict = {
     'puiss_admin_98': [power],
-    'typ_boite_nb_rapp': [gearbox],
-    'hybride': [0],
-    'conso_urb': [5],
-    'conso_exurb': [4],
-    'masse_ordma_min': [1200],
+    'conso_urb': [conso_urb],
+    'conso_exurb': [conso_exurb],
+    'masse_ordma_avg': [masse_ordma_avg],
+    'num_gears': [num_gears],
     'cod_cbr': [fuel_type],
-    'lib_mrq': ['default'],
-    'lib_mod_doss': ['default'],
-    'lib_mod': ['default'],
-    'dscom': ['default'],
-    'champ_v9': ['default'],
-    'Carrosserie': ['default'],
-    'gamme': ['default']
+    'hybride': [hybride],
+    'gearbox_type': [gearbox_type],
+    'Carrosserie': [carrosserie],
+    'gamme': [gamme]
 }
+# Convert input dictionary to DataFrame
 input_df = pd.DataFrame(input_dict)
-input_df = input_df[all_features]  # Ensure column order
+input_df = input_df[features]  # Ensure column order
 
 # Prediction button
 if st.button("Predict CO₂ & Bonus/Malus"):
