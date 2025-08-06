@@ -74,14 +74,52 @@ Built using [Dash](https://dash.plotly.com), the app offers:
 
 1. **Clone the repo**
 ```bash
-git clone https://github.com/yourusername/co2-emissions-bonus-malus.git
+git clone https://github.com/cynthia-francis/Prediction_CO2_Emissions_Cars
+.git
 cd co2-emissions-bonus-malu
-
+```
 2. **Install dependencies**
-pip install -r requirements.txt
-
+```pip install -r requirements.txt
+```
 3. **Run the web app**
-python webapp.py
+```python webapp.py
+```
+Then go to: http://127.0.0.1:8050
+
+
+## 📁 Folder Structure
+
+Prediction_CO2_Emissions_Cars/
+│
+├── data/
+│   ├── bonus_malus_france_2014_combined.csv
+│   ├── carlab-annuaire-variable.xlsx
+│   ├── carlab-mars-2014-complete.zip
+│   ├── mars-2014-complete.csv
+│   └── model_results.csv
+│
+├── models/
+│   ├── model_Lasso.pkl
+│   ├── model_Ridge.pkl
+│   ├── model_RandomForest.pkl
+│   ├── xgb_model_XGBoost.json
+│   ├── co2_emission_predictor.pkl
+│   └── preprocessor.pkl
+│
+├── notebooks/
+│   ├── preprocessing.ipynb
+│
+├── app/
+│   ├── webapp.py
+│
+├── requirements.txt
+├── README.md
+├── .env
+└── .gitignore
+
+
+
+
 
 
 
