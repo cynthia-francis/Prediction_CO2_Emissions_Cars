@@ -79,10 +79,12 @@ git clone https://github.com/cynthia-francis/Prediction_CO2_Emissions_Cars
 cd co2-emissions-bonus-malu
 ```
 2. **Install dependencies**
-```pip install -r requirements.txt
+```bash
+pip install -r requirements.txt
 ```
 3. **Run the web app**
-```python webapp.py
+```bash
+python webapp.py
 ```
 Then go to: http://127.0.0.1:8050
 
