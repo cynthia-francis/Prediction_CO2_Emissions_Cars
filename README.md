@@ -73,9 +73,15 @@ Built using [Dash](https://dash.plotly.com), the app offers:
   ## 🚀 Run the App Locally
 
 1. **Clone the repo**
-
 ```bash
 git clone https://github.com/yourusername/co2-emissions-bonus-malus.git
 cd co2-emissions-bonus-malu
+
+2. **Install dependencies**
+pip install -r requirements.txt
+
+3. **Run the web app**
+python webapp.py
+
 
 
