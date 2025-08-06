@@ -91,6 +91,8 @@ Then go to: http://127.0.0.1:8050
 
 ## 📁 Folder Structure
 
+
+```text
 Prediction_CO2_Emissions_Cars/
 ├── data/
 │   ├── bonus_malus_france_2014_combined.csv
@@ -117,7 +119,7 @@ Prediction_CO2_Emissions_Cars/
 ├── README.md
 ├── .env
 └── .gitignore
-
+```
 
 
 
