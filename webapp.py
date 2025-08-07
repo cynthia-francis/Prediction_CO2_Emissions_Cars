@@ -1,187 +1,3 @@
-'''import dash
-from dash import dcc, html, Input, Output, State
-import pandas as pd
-import joblib
-import xgboost as xgb
-import dash_bootstrap_components as dbc
-
-# ========== Feature Lists ==========
-features = [
-    'cod_cbr', 'hybride', 'puiss_admin_98', 'conso_urb', 'conso_exurb',
-    'gearbox_type', 'num_gears', 'masse_ordma_avg', 'Carrosserie', 'gamme'
-]
-
-numeric_features = ['puiss_admin_98', 'conso_urb', 'conso_exurb', 'masse_ordma_avg', 'num_gears']
-categorical_features = list(set(features) - set(numeric_features))
-
-# ========== Load Models ==========
-preprocessor = joblib.load('preprocessor.pkl')
-models = {}
-
-for model_name in ['Lasso', 'Ridge', 'RandomForest', 'XGBoost']:
-    if model_name == 'XGBoost':
-        booster = xgb.Booster()
-        booster.load_model(f'xgb_model_{model_name}.json')
-        xgb_model = xgb.XGBRegressor()
-        xgb_model._Booster = booster
-        models[model_name] = xgb_model
-    else:
-        models[model_name] = joblib.load(f'model_{model_name}.pkl')
-
-
-def prepare_input(df):
-    for col in numeric_features:
-        df[col] = pd.to_numeric(df[col], errors='coerce')
-    for col in categorical_features:
-        df[col] = df[col].astype(str)
-    df = df[features]
-    return df
-
-
-def make_pipeline(preprocessor, model):
-    def predict(X):
-        X_clean = prepare_input(X.copy())
-        X_prep = preprocessor.transform(X_clean)
-        return model.predict(X_prep)
-    return predict
-
-
-predictors = {name: make_pipeline(preprocessor, mdl) for name, mdl in models.items()}
-
-
-def bonus_malus_2014(co2):
-    if co2 <= 100:
-        return "Bonus: 1000€"
-    elif co2 <= 130:
-        return "No bonus or malus"
-    elif co2 <= 160:
-        return "Malus: 200€"
-    elif co2 <= 190:
-        return "Malus: 1000€"
-    else:
-        return "Malus: 2000€"
-
-
-# ========== Dash App ==========
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-server = app.server
-
-app.layout = dbc.Container([
-    html.H2("Car CO₂ Emissions Predictor & 2014 Bonus/Malus Calculator", className="mb-4"),
-
-    dbc.Row([
-        dbc.Col([
-            dbc.Label("Model"),
-            dcc.Dropdown(id='model-select', options=[{'label': k, 'value': k} for k in models], value='Lasso')
-        ]),
-        dbc.Col([
-            dbc.Label("Power (puiss_admin_98)"),
-            dcc.Input(id='power', type='number', min=20, max=400, value=100)
-        ]),
-        dbc.Col([
-            dbc.Label("Urban Consumption (conso_urb)"),
-            dcc.Input(id='conso_urb', type='number', min=0, max=50, value=5.0)
-        ]),
-        dbc.Col([
-            dbc.Label("Extra-urban Consumption (conso_exurb)"),
-            dcc.Input(id='conso_exurb', type='number', min=0, max=50, value=4.0)
-        ]),
-    ], className="mb-3"),
-
-    dbc.Row([
-        dbc.Col([
-            dbc.Label("Mass (masse_ordma_avg)"),
-            dcc.Input(id='mass', type='number', min=500, max=3000, value=1200)
-        ]),
-        dbc.Col([
-            dbc.Label("Number of Gears"),
-            dcc.Dropdown(id='num_gears', options=[{'label': i, 'value': i} for i in [0, 4, 5, 6, 7, 8, 9]], value=6)
-        ]),
-        dbc.Col([
-            dbc.Label("Fuel Type"),
-            dcc.Dropdown(id='fuel_type', options=[{'label': ft, 'value': ft} for ft in
-                                                  ['ES', 'GO', 'ES/GP', 'GP/ES', 'EH', 'GH', 'ES/GN', 'GN/ES', 'FE', 'GN', 'GL']], value='ES')
-        ]),
-        dbc.Col([
-            dbc.Label("Hybrid"),
-            dcc.Dropdown(id='hybride', options=[{'label': 'oui', 'value': 'oui'}, {'label': 'non', 'value': 'non'}], value='non')
-        ])
-    ], className="mb-3"),
-
-    dbc.Row([
-        dbc.Col([
-            dbc.Label("Gearbox Type"),
-            dcc.Dropdown(id='gearbox_type', options=[{'label': g, 'value': g} for g in ['M', 'A', 'D', 'V', 'S']], value='M')
-        ]),
-        dbc.Col([
-            dbc.Label("Body Type"),
-            dcc.Dropdown(id='carrosserie', options=[{'label': c, 'value': c} for c in [
-                'BERLINE', 'BREAK', 'COUPE', 'CABRIOLET', 'TS TERRAINS/CHEMINS',
-                'COMBISPACE', 'MINISPACE', 'MONOSPACE COMPACT', 'MONOSPACE', 'MINIBUS', 'COMBISPCACE']], value='BERLINE')
-        ]),
-        dbc.Col([
-            dbc.Label("Gamme"),
-            dcc.Dropdown(id='gamme', options=[{'label': g, 'value': g} for g in
-                                              ['MOY-SUPER', 'LUXE', 'MOY-INFER', 'INFERIEURE', 'SUPERIEURE', 'ECONOMIQUE']], value='MOY-SUPER')
-        ])
-    ], className="mb-3"),
-
-    html.Button("Predict CO₂ & Bonus/Malus", id='predict-btn', className='btn btn-primary'),
-
-    html.Br(), html.Br(),
-    html.Div(id='prediction-output')
-], fluid=True)
-
-
-@app.callback(
-    Output('prediction-output', 'children'),
-    Input('predict-btn', 'n_clicks'),
-    State('model-select', 'value'),
-    State('power', 'value'),
-    State('conso_urb', 'value'),
-    State('conso_exurb', 'value'),
-    State('mass', 'value'),
-    State('num_gears', 'value'),
-    State('fuel_type', 'value'),
-    State('hybride', 'value'),
-    State('gearbox_type', 'value'),
-    State('carrosserie', 'value'),
-    State('gamme', 'value'),
-)
-def predict(n_clicks, model_name, power, conso_urb, conso_exurb, mass,
-            num_gears, fuel_type, hybride, gearbox_type, carrosserie, gamme):
-    if not n_clicks:
-        return ""
-
-    input_dict = {
-        'puiss_admin_98': [power],
-        'conso_urb': [conso_urb],
-        'conso_exurb': [conso_exurb],
-        'masse_ordma_avg': [mass],
-        'num_gears': [num_gears],
-        'cod_cbr': [fuel_type],
-        'hybride': [hybride],
-        'gearbox_type': [gearbox_type],
-        'Carrosserie': [carrosserie],
-        'gamme': [gamme]
-    }
-
-    try:
-        df = pd.DataFrame(input_dict)
-        df = df[features]
-        pred_func = predictors[model_name]
-        co2 = pred_func(df)[0]
-        bm = bonus_malus_2014(co2)
-        return dbc.Alert(f"{model_name} predicts CO₂: {co2:.2f} g/km — {bm}", color="success")
-    except Exception as e:
-        return dbc.Alert(f"Prediction error: {e}", color="danger")
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
-'''
-
-
 import dash
 from dash import dcc, html, Input, Output, State
 import pandas as pd
@@ -189,10 +5,22 @@ import joblib
 import xgboost as xgb
 import dash_bootstrap_components as dbc
 import pandas as pd
+from pathlib import Path
 
 
+# Base directory of the project (go up from the app folder)
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-model_summary_df = pd.read_csv("model_results.csv")
+# Define the source and data directories
+SRC_DIR = BASE_DIR / "src"
+DATA_DIR = BASE_DIR / "data"
+
+# Load model results and preprocessor from src/
+model_summary_df = pd.read_csv(SRC_DIR / "model_results.csv")
+preprocessor = joblib.load(SRC_DIR / "preprocessor.pkl")
+
+# Load bonus-malus data from data/
+bonus_malus_df = pd.read_csv(DATA_DIR / "bonus_malus_france_2014_combined.csv")
 
 
 # ========== Feature Lists ==========
@@ -221,20 +49,19 @@ display_names = {
 
 
 # ========== Load Models ==========
-preprocessor = joblib.load('preprocessor.pkl')
+#preprocessor = joblib.load('../src/preprocessor.pkl')
 models = {}
-
 for model_name in ['Lasso', 'Ridge', 'RandomForest', 'XGBoost']:
     if model_name == 'XGBoost':
         booster = xgb.Booster()
-        booster.load_model(f'xgb_model_{model_name}.json')
+        booster.load_model(SRC_DIR / f'xgb_model_{model_name}.json')
         xgb_model = xgb.XGBRegressor()
         xgb_model._Booster = booster
         models[model_name] = xgb_model
     else:
-        models[model_name] = joblib.load(f'model_{model_name}.pkl')
-
-
+        models[model_name] = joblib.load(SRC_DIR / f'model_{model_name}.pkl')
+        
+# ========== Prepare Input Data ==========
 def prepare_input(df):
     for col in numeric_features:
         df[col] = pd.to_numeric(df[col], errors='coerce')
@@ -243,7 +70,7 @@ def prepare_input(df):
     df = df[features]
     return df
 
-
+# ========== Create Prediction Pipeline ==========
 def make_pipeline(preprocessor, model):
     def predict(X):
         X_clean = prepare_input(X.copy())
@@ -254,12 +81,7 @@ def make_pipeline(preprocessor, model):
 
 predictors = {name: make_pipeline(preprocessor, mdl) for name, mdl in models.items()}
 
-
-import pandas as pd
-
-# Load bonus-malus data
-bonus_malus_df = pd.read_csv("bonus_malus_france_2014_combined.csv")
-
+# ========== Bonus/Malus Function ==========
 # Define the function
 def bonus_malus_2014(co2):
     for _, row in bonus_malus_df.iterrows():
