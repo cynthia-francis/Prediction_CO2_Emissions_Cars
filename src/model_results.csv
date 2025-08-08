@@ -1,0 +1,5 @@
+Model,Best Parameters,Best CV R2,Test R2,Test RMSE,Top 6 Features
+Lasso,{'model__alpha': 0.01},0.9964,0.9977,2.4337,"Low Emission Fuel (FE) (76.70), Groupe Propulseur/Essence (GP/ES) (50.08), Natural Gas (GN) (43.97), Natural Gas/Essence (GN/ES) (35.80), Urban Consumption (26.07), Highway/Extra-urban Consumption (24.31)"
+Ridge,{'model__alpha': 0.1},0.9968,0.9974,2.5859,"Low Emission Fuel (FE) (67.77), Diesel Fuel (GO) (41.87), Groupe Propulseur/Essence (GP/ES) (31.42), Natural Gas (GN) (26.50), Urban Consumption (26.32), Essence/Groupe Propulseur (ES/GP) (25.81)"
+RandomForest,"{'model__max_depth': None, 'model__n_estimators': 50}",0.9958,0.9986,1.9343,"Highway/Extra-urban Consumption (0.92), Urban Consumption (0.06), Administrative Power 98 (0.00), Average Vehicle Mass (0.00), Diesel Fuel (GO) (0.00), Groupe Propulseur/Essence (GP/ES) (0.00)"
+XGBoost,"{'model__learning_rate': 0.1, 'model__max_depth': 3, 'model__n_estimators': 50}",0.9914,0.9939,3.9725,"Highway/Extra-urban Consumption (0.74), Urban Consumption (0.11), Average Vehicle Mass (0.04), Diesel Fuel (GO) (0.02), gamme_INFERIEURE (0.02), Groupe Propulseur/Essence (GP/ES) (0.02)"
