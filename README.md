@@ -152,6 +152,7 @@ Prediction_CO2_Emissions_Cars/
 │   └── preprocessor.pkl
 │   ├── xgb_model_XGBoost.json
 │
+├── CO2_Emissions_Prediction_Report.pdf
 ├── README.md
 ├── requirements.txt
 ├── .env
