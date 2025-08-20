@@ -1,6 +1,6 @@
 # 🚗 CO₂ Emissions Prediction & Bonus-Malus Mapping (France, 2014)
 
-This project uses official 2014 vehicle homologation data from ADEME and UTAC to train machine learning models that predict the CO₂ emissions of cars based on their technical specifications. It also connects these predictions to the official French **bonus-malus écologique** policy from 2014, quantifying the financial incentives or penalties that would apply based on emissions levels. An interactive Dash web app allows users to input car features, get real-time CO₂ predictions, and see the corresponding bonus or malus
+This project uses official 2014 vehicle homologation data from ADEME and UTAC to train machine learning models that predict the CO₂ emissions of cars based on their technical specifications. It also connects these predictions to the official French **bonus-malus écologique** policy from 2014, quantifying the financial incentives or penalties that would apply based on emissions levels. An interactive Dash web app allows users to input car features, get real-time CO₂ predictions, and see the corresponding bonus or malus.
 
 ---
 
